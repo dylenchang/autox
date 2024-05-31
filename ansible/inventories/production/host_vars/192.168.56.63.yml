@@ -1,0 +1,3 @@
+ansible_user: root
+ansible_password: vagrant
+ansible_become_password: vagrant

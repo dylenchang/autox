@@ -1,0 +1,12 @@
+.vscode/
+.idea/
+*.lock
+.tox/
+.ruff_cache/
+*.db
+/dist/
+/.pytest_cache/
+.coverage*
+/fss/htmlcov/
+/*/build
+log/
