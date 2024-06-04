@@ -1,0 +1,23 @@
+---
+- name: Update APT sources to Aliyun
+  hosts: all
+  become: yes
+  tasks:
+    - name: Get current timestamp
+      command: date +%Y%m%d%H%M%S
+      register: current_timestamp
+
+    - name: Backup sources.list with timestamp
+      copy:
+        src: /etc/apt/sources.list
+        dest: /etc/apt/sources.list.{{ current_timestamp.stdout }}
+
+    - name: Replace old sources to aliyun
+      ansible.builtin.replace:
+        path: /etc/apt/sources.list
+        regexp: 'http://.*.ubuntu.com'
+        replace: 'http://mirrors.aliyun.com'
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes

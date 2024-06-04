@@ -1,0 +1,93 @@
+---
+- name: 安装redis
+  hosts: all
+
+  vars:
+    redis_password: "dao"
+
+  tasks:
+    - name: Install Redis on Debian
+      apt:
+        name: redis-server
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Redis on CentOS
+      yum:
+        name: redis
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Configure Redis to allow remote connections on Debian
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^bind'
+        line: 'bind 0.0.0.0'
+        state: present
+      when: ansible_os_family == "Debian"
+      notify: Restart Redis
+
+    - name: Configure Redis to allow remote connections on CentOS
+      lineinfile:
+        path: /etc/redis.conf
+        regexp: '^bind'
+        line: 'bind 0.0.0.0'
+        state: present
+      when: ansible_os_family == "RedHat"
+      notify: Restart Redis
+
+    - name: Configure Redis password on Debian
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '# requirepass foobared'
+        line: "requirepass {{ redis_password }}"
+        state: present
+      when: ansible_os_family == "Debian"
+      notify: Restart Redis
+
+    - name: Configure Redis password on CentOS
+      lineinfile:
+        path: /etc/redis.conf
+        regexp: '# requirepass foobared'
+        line: "requirepass {{ redis_password }}"
+        state: present
+      when: ansible_os_family == "RedHat"
+      notify: Restart Redis
+
+    - name: 关闭 Redis 的保护模式在Debian系统
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: 'protected-mode yes'
+        line: "protected-mode no"
+        state: present
+      when: ansible_os_family == "Debian"
+      notify: Restart Redis
+
+    - name: 关闭 Redis 的保护模式在CentOS系统
+      lineinfile:
+        path: /etc/redis.conf
+        regexp: 'protected-mode yes'
+        line: "protected-mode no"
+        state: present
+      when: ansible_os_family == "RedHat"
+      notify: Restart Redis
+
+    - name: Ensure Redis is started and enabled on Debian
+      service:
+        name: redis-server
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Redis is started and enabled on CentOS
+      service:
+        name: redis
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
+
+  handlers:
+    - name: Restart Redis
+      service:
+        name: "{{ 'redis-server' if ansible_os_family == 'Debian' else 'redis' }}"
+        state: restarted

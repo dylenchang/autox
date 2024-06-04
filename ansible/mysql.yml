@@ -1,0 +1,80 @@
+---
+- name: 安装mysql
+  hosts: all
+  become: yes
+
+  vars:
+    mysql_root_password: "your_root_password"
+
+  tasks:
+    - name: Install MySQL on Debian
+      apt:
+        name: mysql-server
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install MySQL on CentOS
+      yum:
+        name: mysql-server
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure MySQL is started and enabled on Debian
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure MySQL is started and enabled on CentOS
+      service:
+        name: mysqld
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: Allow MySQL remote connections
+      lineinfile:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '^bind-address'
+        line: 'bind-address = 0.0.0.0'
+        state: present
+      when: ansible_os_family == "Debian"
+      notify: Restart MySQL
+
+    - name: Allow MySQL remote connections on CentOS
+      lineinfile:
+        path: /etc/my.cnf
+        regexp: '^bind-address'
+        line: 'bind-address = 0.0.0.0'
+        state: present
+      when: ansible_os_family == "RedHat"
+      notify: Restart MySQL
+
+    - name: Install ansible python3 mysql dependency on Debian
+      apt:
+        name: python3-mysqldb
+        state: latest
+      when: ansible_os_family == "Debian"
+
+    - name: Install ansible python3 mysql dependency on CentOS
+      yum:
+        name: python3-PyMySQL
+        state: latest
+      when: ansible_os_family == "RedHat"
+
+    - name: Set MySQL root password
+      mysql_user:
+        login_user: root
+        login_password: ''
+        user: root
+        password: "{{ mysql_root_password }}"
+        host_all: yes
+        state: present
+
+
+  handlers:
+    - name: Restart MySQL
+      service:
+        name: "{{ 'mysql' if ansible_os_family == 'Debian' else 'mysqld' }}"
+        state: restarted

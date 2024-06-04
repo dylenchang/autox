@@ -1,0 +1,20 @@
+---
+- name: 安装jdk
+  hosts: all
+  become: yes
+
+  vars:
+    jdk_version: "11"
+
+  tasks:
+    - name: Install JDK on Debian
+      apt:
+        name: "openjdk-{{ jdk_version }}-jdk"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install JDK on CentOS
+      yum:
+        name: "java-{{ jdk_version }}-openjdk"
+        state: present
+      when: ansible_os_family == "RedHat"

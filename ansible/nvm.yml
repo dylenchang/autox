@@ -1,0 +1,62 @@
+---
+- name: Install NVM
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install nvm
+      ansible.builtin.shell: >
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+    - name: Source nvm script
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+      args:
+        executable: /bin/bash
+
+    - name: Install Node.js using nvm
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install node
+      args:
+        executable: /bin/bash
+
+    - name: Ensure Node.js is installed
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use node
+        node -v
+      args:
+        executable: /bin/bash
+
+    - name: Install pnpm using npm
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use node
+        npm install -g pnpm
+      args:
+        executable: /bin/bash
+
+    - name: Set npm registry mirror
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use node
+        npm config set registry https://registry.npmmirror.com -g
+      args:
+        executable: /bin/bash
+
+    - name: Set pnpm registry mirror
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use node
+        pnpm config set registry https://registry.npmmirror.com -g
+      args:
+        executable: /bin/bash

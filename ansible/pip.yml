@@ -1,0 +1,26 @@
+---
+- name: 配置pip镜像源
+  hosts: all
+  tasks:
+    - name: 检查pip配置文件是否存在
+      stat:
+        path: ~/.pip/pip.conf
+      register: pip_conf_stat
+
+    - name: 创建pip配置文件
+      file:
+        path: ~/.pip
+        state: directory
+        mode: 0755
+      when: not pip_conf_stat.stat.exists
+
+    - name: 配置pip镜像源信息
+      blockinfile:
+        path: ~/.pip/pip.conf
+        create: yes
+        block: |
+          [global]
+          trusted-host = mirrors.aliyun.com
+          index-url = http://mirrors.aliyun.com/pypi/simple/
+        mode: 0644
+      when: not pip_conf_stat.stat.exists
