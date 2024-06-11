@@ -1,3 +1,0 @@
-- name: 设置变量
-  debug:
-    msg: "Check roles/prepare/variables/defaults/main.yml"
