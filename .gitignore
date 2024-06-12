@@ -10,3 +10,4 @@
 /toolbox/htmlcov/
 /*/build
 log/
+/.toolbox_venv/
