@@ -7,6 +7,6 @@
 /dist/
 /.pytest_cache/
 .coverage*
-/fss/htmlcov/
+/toolbox/htmlcov/
 /*/build
 log/
