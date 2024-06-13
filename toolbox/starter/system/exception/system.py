@@ -14,3 +14,8 @@ class SystemException(ServiceException):
         super(SystemException, self).__init__(
             code=code, msg=msg, status_code=status_code
         )
+
+
+class PingException(Exception):
+    """Custom exception for ping failures."""
+    pass

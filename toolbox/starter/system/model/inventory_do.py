@@ -30,10 +30,10 @@ class BaseInventory(SQLModel):
         default=None, sa_column=Column(String(32), nullable=True, comment="保险库密码")
     )
     status: int = Field(
-        default=None, sa_column=Column(SmallInteger(1), nullable=True, comment="状态")
+        default=None, sa_column=Column(SmallInteger(), nullable=True, comment="状态")
     )
 
 
 class InventoryDO(ModelExt, BaseInventory, BaseModel, table=True):
     __tablename__ = "sys_inventory"
-    __table_args__ = {"comment": "用户信息表"}
+    __table_args__ = {"comment": "主机清单表"}

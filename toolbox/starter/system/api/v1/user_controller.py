@@ -2,10 +2,8 @@
 
 from typing import List, Dict
 
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi_pagination import Params
-from starlette.responses import StreamingResponse
 
 from toolbox.common.result import result
 from toolbox.common.result.result import BaseResponse
@@ -13,7 +11,6 @@ from toolbox.common.schema.schema import Token, CurrentUser
 from toolbox.common.security.security import get_current_user
 from toolbox.starter.system.factory.service_factory import (
     get_user_service,
-    get_user_role_service,
 )
 from toolbox.starter.system.model.user_do import UserDO
 from toolbox.starter.system.schema.user_schema import (
@@ -23,7 +20,6 @@ from toolbox.starter.system.schema.user_schema import (
     UpdateUserCmd,
     UserFilterParams,
 )
-from toolbox.starter.system.service.user_role_service import UserRoleService
 from toolbox.starter.system.service.user_service import UserService
 
 user_router = APIRouter()
@@ -119,60 +115,6 @@ async def update_user(
     return result.success()
 
 
-@user_router.get("/exportTemplate")
-async def export_user_template(
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> StreamingResponse:
-    """
-    Export a template for user information.
-
-    Args:
-        current_user: Logged-in user requesting the template.
-
-    Returns:
-        StreamingResponse with user field
-    """
-    return await user_service.export_user_template()
-
-
-@user_router.post("/import")
-async def import_user(
-    file: UploadFile,
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> Dict:
-    """
-    Import user information from a file.
-
-    Args:
-        file: The file containing user information to import.
-
-        current_user: Logged-in user performing the import.
-    Returns:
-        Success result message
-    """
-    await user_service.import_user(file=file)
-    return result.success()
-
-
-@user_router.get("/export")
-async def export_user(
-    params: Params = Depends(),
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> StreamingResponse:
-    """
-    Export user information based on provided parameters.
-
-    Args:
-        params: Filtering and format parameters for export.
-
-        current_user: Logged-in user requesting the export.
-
-    Returns:
-        StreamingResponse with user info
-    """
-    return await user_service.export_user(params=params)
-
-
 @user_router.post("/list")
 async def list_user(
     userFilterParams: UserFilterParams,
@@ -197,28 +139,3 @@ async def list_user(
         like=userFilterParams.like,
     )
     return BaseResponse(data=records)
-
-
-@user_router.post("/{user_id}/roles")
-async def user_roles(
-    user_id: int,
-    role_ids: List[int],
-    user_role_service: UserRoleService = Depends(get_user_role_service),
-    current_user: CurrentUser = Depends(get_current_user()),
-) -> Dict:
-    """
-    Assign roles to a user.
-
-    Args:
-        user_id: ID of the user to assign roles to.
-
-        role_ids: List of role IDs to assign to the user.
-
-        user_role_service: Service handling user-role associations.
-
-        current_user: Logged-in user performing the role assignment.
-    Returns:
-        Success result message
-    """
-    await user_role_service.assign_roles(user_id=user_id, role_ids=role_ids)
-    return result.success()
