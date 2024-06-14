@@ -5,7 +5,6 @@ from typing import List, Dict
 from fastapi import APIRouter, Depends
 
 from toolbox.common.result import result
-from toolbox.common.result.result import BaseResponse
 from toolbox.common.schema.schema import CurrentUser
 from toolbox.common.security.security import get_current_user
 from toolbox.starter.system.factory.service_factory import get_inventory_service
@@ -21,7 +20,7 @@ inventory_service: InventoryService = get_inventory_service()
 async def create_inventory(
         inventory_create_cmd: InventoryCreateCmd,
         current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[int]:
+) -> Dict:
     """
     Creates a new inventory with the provided data.
 
@@ -37,17 +36,17 @@ async def create_inventory(
     ipv6_address = inventory_create_cmd.ipv6_address
     if ipv4_address:
         await inventory_service.ping_ip(ip_address=ipv4_address)
-    else:
+    if ipv6_address:
         await inventory_service.ping_ip(ip_address=ipv6_address)
-    inventory: InventoryDO = await inventory_service.save(record=inventory_create_cmd)
+    inventory: InventoryDO = await inventory_service.save(record=InventoryDO(**inventory_create_cmd.model_dump()))
     return result.success(data=inventory.id)
 
 
-@inventory_router.get("/inventories")
+@inventory_router.post("/inventories")
 async def get_inventory(
         ids: List[int],
         current_user: CurrentUser = Depends(get_current_user()),
-) -> BaseResponse[InventoryDO]:
+) -> dict:
     """
     Retrieves inventories by a list of ID.
 
@@ -60,5 +59,4 @@ async def get_inventory(
     Returns:
         BaseResponse with a list of InventoryDO details.
     """
-    inventory_do: InventoryDO = await inventory_service.retrieve_by_id(id=id)
-    return result.success(data=inventory_do)
+    return result.success(data=await inventory_service.retrieve_by_ids(ids=ids))

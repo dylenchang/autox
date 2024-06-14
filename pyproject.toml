@@ -7,7 +7,7 @@ requires = [
 [tool.poetry]
 name = "toolbox"
 version = "0.1.0"
-description = "Fss aims to be one of the best scaffold in PyWeb."
+description = "Toolbox aims to be one of the best devops helper."
 license = "MIT"
 authors = [
   "tyvekZhang <tyvek.zhang@gmail.com>",
