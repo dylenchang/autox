@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from sqlalchemy import SmallInteger
+from sqlalchemy import SmallInteger, Integer
 from sqlmodel import Field, Column, String, SQLModel
 
 from toolbox.common.persistence.base_model import ModelExt, BaseModel
@@ -14,14 +14,26 @@ class BaseInventory(SQLModel):
             String(32), index=True, unique=True, nullable=True, comment="主机名"
         )
     )
+    user: str = Field(
+        default=None, sa_column=Column(String(32), nullable=True, comment="用户名")
+    )
     password: str = Field(
         default=None, sa_column=Column(String(64), nullable=True, comment="密码")
     )
+    become_user: str = Field(
+        default=None, sa_column=Column(String(32), nullable=True, comment="提权用户")
+    )
+    become_password: str = Field(
+        default=None, sa_column=Column(String(64), nullable=True, comment="提权密码")
+    )
     ipv4_address: Optional[str] = Field(
-        default=None, sa_column=Column(String(16), comment="ipv4地址")
+        default=None, sa_column=Column(String(16), nullable=True, comment="ipv4地址")
     )
     ipv6_address: Optional[str] = Field(
-        default=None, sa_column=Column(String(64), comment="ipv6地址")
+        default=None, sa_column=Column(String(64), nullable=True, comment="ipv6地址")
+    )
+    port: Optional[int] = Field(
+        default=22, sa_column=Column(Integer(), nullable=True, comment="ssh端口")
     )
     vault_id: str = Field(
         default=None, sa_column=Column(String(32), nullable=True, comment="vault标识")
