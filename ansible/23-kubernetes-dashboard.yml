@@ -1,5 +1,5 @@
 # 安装基础插件
-- hosts: 
+- hosts:
   - kube-master[0]
   roles:
   - prepare/variables

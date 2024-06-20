@@ -13,7 +13,7 @@
           NO_PROXY: "{{ no_proxy | default ('') }}"
       no_log: true
 
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables

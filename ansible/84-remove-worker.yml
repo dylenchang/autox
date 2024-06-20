@@ -1,4 +1,4 @@
-- hosts: 
+- hosts:
   - del-worker
   vars_prompt:
     name: "restore_confirmation"

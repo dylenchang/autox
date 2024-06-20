@@ -1,11 +1,11 @@
 - name: 创建 kubernetes 证书存放目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
   - /etc/kubernetes/pki
   - /var/lib/kubelet/pki
-  when: 
+  when:
   - inventory_hostname in (groups['kube-master'] + groups['new-master'] + groups['kube-worker'] + groups['new-worker'])
 
 - block:
@@ -17,17 +17,17 @@
 
 # 分发证书
 - include_tasks: distribute.yml
-  when: 
+  when:
   - inventory_hostname in (groups['kube-master'] + groups['new-master'] + groups['kube-worker'] + groups['new-worker'])
 
 - name: 读取 kubelet.conf 文件 stat 信息
-  stat: 
+  stat:
     path: /etc/kubernetes/kubelet.conf
   register: kubelet_conf_stat
-  when: 
+  when:
   - inventory_hostname in (groups['kube-master'] + groups['new-master'] + groups['kube-worker'] + groups['new-worker'])
 
 - include_tasks: kubeconfig.yml
-  when: 
+  when:
   - kubelet_conf_stat.stat.exists
   - inventory_hostname in (groups['kube-master'] + groups['new-master'] + groups['kube-worker'] + groups['new-worker'])

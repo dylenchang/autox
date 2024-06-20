@@ -36,4 +36,3 @@
           enabled: no
         when: ufw_already_installed.stdout == "active"
       when: "firewalld_disabled | default(True) | bool"
-

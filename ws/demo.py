@@ -44,9 +44,13 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_text()
             if data == "run_playbook":
-                process = subprocess.Popen(['ansible-playbook', '/opt/project/autox/ansible/site.yml'], stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE, text=True)
-                for line in iter(process.stdout.readline, ''):
+                process = subprocess.Popen(
+                    ["ansible-playbook", "/opt/project/autox/ansible/site.yml"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
+                for line in iter(process.stdout.readline, ""):
                     await websocket.send_text(line)
                 process.stdout.close()
                 process.wait()
@@ -56,5 +60,6 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
 
-if __name__ == '__main__':
-    uvicorn.run(app, port=9999, host='0.0.0.0')
+
+if __name__ == "__main__":
+    uvicorn.run(app, port=9999, host="0.0.0.0")

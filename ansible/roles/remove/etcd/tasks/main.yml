@@ -44,7 +44,7 @@
     --mount type=bind,src=/etc/kubernetes/pki/etcd,dst=/etc/kubernetes/pki/etcd,options=rbind:ro
     --rm {{ etcd_image }} etcd-list-member
     {% elif container_manager_detected == 'docker' %}
-    docker run --net host -e ETCDCTL_API=3 
+    docker run --net host -e ETCDCTL_API=3
     -v /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd
     --rm {{ etcd_image }}
     {% endif %}
@@ -63,7 +63,7 @@
     --mount type=bind,src=/etc/kubernetes/pki/etcd,dst=/etc/kubernetes/pki/etcd,options=rbind:ro
     --rm {{ etcd_image }} etcd-remove-member
     {% elif container_manager_detected == 'docker' %}
-    docker run --net host -e ETCDCTL_API=3 
+    docker run --net host -e ETCDCTL_API=3
     -v /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd
     --rm {{ etcd_image }}
     {% endif %}
@@ -76,7 +76,7 @@
   when: etcd_member_id.stdout != ''
 
 - name: 删除 etcd mainfest 文件以及数据
-  file: 
+  file:
     name: "{{ item }}"
     state: absent
   with_items:

@@ -14,7 +14,7 @@
 
 - name: 其他 master 节点加入集群
   shell: >
-    kubeadm join --config /etc/kubernetes/kubeadm-config.yaml 
+    kubeadm join --config /etc/kubernetes/kubeadm-config.yaml
     --ignore-preflight-errors=ImagePull,DirAvailable--etc-kubernetes-manifests
 
 - include_tasks: "{{ (role_path + '/../kube-certificates/tasks/kubeconfig.yml') | realpath  }}"

@@ -13,7 +13,7 @@
       {%- endif -%}
 
 - name: 创建 kubernetes 相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -26,7 +26,7 @@
   - /usr/share/bash-completion/completions
 
 - name: 读取 kubelet.conf 文件 stat 信息
-  stat: 
+  stat:
     path: /etc/kubernetes/kubelet.conf
   register: kubelet_conf_stat
 
@@ -52,13 +52,13 @@
 
 # 初始化第一个 master 节点
 - include_tasks: master-init.yml
-  when: 
+  when:
   - not kubelet_conf_stat.stat.exists
   - inventory_hostname == groups['kube-master'][0]
 
 # 初始化其他 master 节点
 - include_tasks: master-join.yml
-  when: 
+  when:
   - not kubelet_conf_stat.stat.exists
   - inventory_hostname != groups['kube-master'][0]
   - inventory_hostname in (groups['kube-master'] + groups['new-master'])

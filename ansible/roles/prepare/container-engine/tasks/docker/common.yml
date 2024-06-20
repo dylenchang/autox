@@ -1,5 +1,5 @@
 - name: 准备 Docker 相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -30,7 +30,7 @@
     name: docker
     state: restarted
     enabled: yes
-  when: 
+  when:
   - configuration_result.changed
   - '"active" not in docker_already_running.stdout'
 
@@ -39,20 +39,20 @@
     name: docker
     state: restarted
     enabled: yes
-  when: 
+  when:
   - configuration_result.changed
   - "restar_container_manager_force | default(True) | bool"
 
 - block:
-  - name: 需手动重启 Docker 
-    vars: 
+  - name: 需手动重启 Docker
+    vars:
       msg: |
         节点：{{ inventory_hostname }} ，Docker 处于运行中，
         但 Docker 配置文件 /etc/docker/daemon.json 已更新，
         请在集群安装完成后手动执行下面命令重启该节点 docker 与 kubelet：
             systemctl restart docker
             systemctl restart kubelet
-        
+
         若重启后 kubelet 无法正常启动：
         请确认以下两个文件中 cgroup driver 参数是否设置为 systemd，
         若不是则修改为 systemd 后再次重启 kubelet。
@@ -61,13 +61,13 @@
         在 /var/lib/kubelet/config.yaml 文件中参数名为：cgroupDriver；
         在 /var/lib/kubelet/kubeadm-flags.env 文件中参数名为：--cgroup-driver，若参数不存在请忽略。
 
-    debug: 
+    debug:
       msg: "{{ msg.split('\n') }}"
 
   - name: 等待用户查看日志
     shell: sleep 60
     run_once: true
-  when: 
+  when:
   - configuration_result.changed
   - '"active" in docker_already_running.stdout'
   - "not (restar_container_manager_force | default(True) | bool)"

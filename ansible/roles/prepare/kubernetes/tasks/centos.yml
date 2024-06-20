@@ -10,7 +10,7 @@
 
 - name: 安装 kubeadm kubelet kubectl
   yum:
-    name: 
+    name:
     - "kubectl-{{ kube_version }}"
     - "kubelet-{{ kube_version }}"
     - "kubeadm-{{ kube_version }}"

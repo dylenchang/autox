@@ -33,7 +33,7 @@
     retries: 5
     until: remove_all_docker_containers.rc == 0
     delay: 5
-  
+
   - name: 清理 docker 相关数据
     shell: "docker system prune -a -f --volumes"
     args:
@@ -58,7 +58,7 @@
     check_mode: no
     register: docker_mounted_dirs
     failed_when: false
-  
+
   - name: 卸载 docker 挂载的目录
     command: umount -f {{ item }}
     with_items: "{{ docker_mounted_dirs.stdout_lines }}"
@@ -107,7 +107,7 @@
     until: remove_all_cri_containers.rc == 0
     delay: 5
     ignore_errors: true
-  
+
   - name: 移除所有 cri pods
     shell: "set -o pipefail && crictl pods -q | xargs -r crictl -t 60s rmp"
     args:
@@ -161,7 +161,7 @@
   delay: 5
 
 - name: 删除 kubelet 相关文件或目录
-  file: 
+  file:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -204,7 +204,7 @@
     # - /var/run/containerd
     # - /var/run/docker
     # - /var/run/kubelet
-    
+
 - name: 清理 iptables
   shell: "{{ item }} || true"
   with_items:

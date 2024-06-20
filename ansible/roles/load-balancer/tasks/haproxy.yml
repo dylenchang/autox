@@ -1,6 +1,6 @@
 - name: Haproxy | 生成 haproxy 配置文件
-  template: 
-    src: haproxy/haproxy.cfg.j2 
+  template:
+    src: haproxy/haproxy.cfg.j2
     dest: /etc/kubernetes/plugins/lb-config/haproxy.cfg
     owner: root
     mode: 0644
@@ -13,7 +13,7 @@
   - "{{ pod_infra_container_image }}"
 
 - name: Haproxy | 生成 haproxy static pod 文件
-  template: 
+  template:
     src: haproxy/haproxy.yaml.j2
     dest: /etc/kubernetes/manifests/lb-kube-apiserver.yaml
     owner: root

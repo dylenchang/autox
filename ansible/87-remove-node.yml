@@ -1,4 +1,4 @@
-- hosts: 
+- hosts:
   - del-node
   vars_prompt:
     name: "restore_confirmation"

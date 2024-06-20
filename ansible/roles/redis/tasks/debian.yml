@@ -1,0 +1,34 @@
+---
+tasks:
+  - name: 在Debian系统安装Redis
+    ansible.builtin.apt:
+      name: redis-server
+      state: present
+
+  - name: 在Debian系统配置redis允许远程访问
+    ansible.builtin.lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '^bind'
+      line: 'bind 0.0.0.0'
+      state: present
+
+  - name: 在Debian系统配置redis的密码
+    ansible.builtin.lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '# requirepass foobared'
+      line: "requirepass {{ redis_password }}"
+      state: present
+
+  - name: 关闭 Redis的保护模式在Debian系统
+    ansible.builtin.lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: 'protected-mode yes'
+      line: "protected-mode no"
+      state: present
+      notify: Restart Redis in Debian
+
+  - name: 确保Redis在Debian系统正常运行
+    ansible.builtin.service:
+      name: redis-server
+      state: started
+      enabled: yes

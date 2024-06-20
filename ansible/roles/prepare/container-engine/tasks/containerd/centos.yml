@@ -10,7 +10,7 @@
 
 - name: 安装 containerd
   yum:
-    name: 
+    name:
     - "containerd.io-{{ containerd_version.split('-')[0] }}"
     state: present
     enablerepo: docker-ce-stable

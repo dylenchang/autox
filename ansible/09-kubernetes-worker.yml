@@ -1,5 +1,5 @@
 # 初始化worker节点
-- hosts: 
+- hosts:
   - kube-worker
   - new-worker
   roles:

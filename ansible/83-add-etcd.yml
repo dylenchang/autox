@@ -19,7 +19,7 @@
       that: groups['new-etcd']|length <= 1
       msg: "同时只能添加一个 etcd 节点。"
 
-- hosts: 
+- hosts:
   - new-etcd
   roles:
   - prepare/variables
@@ -28,7 +28,7 @@
   - prepare/kubernetes
   environment: "{{ proxy_env }}"
 
-- hosts: 
+- hosts:
   - etcd
   - new-etcd
   roles:
@@ -37,20 +37,20 @@
   - etcd/install
 
 # 添加etcd节点后刷新master节点kubeadm配置
-- hosts: 
+- hosts:
   - kube-master
   roles:
   - prepare/variables
   - kube-master
 
 # 标记各节点角色
-- hosts: 
+- hosts:
   - new-etcd
   roles:
   - prepare/variables
   - post
 
-- hosts: 
+- hosts:
   - kube-master
   roles:
   - prepare/variables
@@ -59,13 +59,13 @@
     shell: >
       kubeadm upgrade apply --config=/etc/kubernetes/kubeadm-config.yaml --force --ignore-preflight-errors=ImagePull
     when: inventory_hostname == groups['kube-master'][0]
-  
+
   - name: "更新 master 节点：{{ inventory_hostname }} 的配置"
     shell: >
       kubeadm upgrade node
       {% if kube_version.split('.')[1]|int == 13 %}
       experimental-control-plane
       {% endif %}
-    when: 
+    when:
     - inventory_hostname != groups['kube-master'][0]
     - inventory_hostname in groups['kube-master']

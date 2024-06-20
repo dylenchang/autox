@@ -1,5 +1,5 @@
 - name: 卸载相关软件
-  apt: 
+  apt:
     name:
     - kubeadm
     - kubectl

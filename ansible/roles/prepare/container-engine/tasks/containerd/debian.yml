@@ -14,7 +14,7 @@
     state: present
 
 - name: 安装 containerd
-  apt: 
+  apt:
     name:
     - "containerd.io={{ containerd_version }}"
     state: present

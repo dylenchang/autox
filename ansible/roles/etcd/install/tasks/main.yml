@@ -13,7 +13,7 @@
       {%- endif -%}
 
 - name: 创建 kubelet 相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -22,7 +22,7 @@
 
 - block:
   - name: 在 etcd 节点创建 etcd 相关目录
-    file: 
+    file:
       name: "{{ item }}"
       state: directory
       owner: root
@@ -41,12 +41,12 @@
     - "{{ pod_infra_container_image }}"
 
   - name: 读取 etcd static pod yaml 文件 stat 信息
-    stat: 
+    stat:
       path: /etc/kubernetes/manifests/etcd-external.yaml
     register: etcd_static_pod_stat
 
   - name: 生成 etcd static pod 文件
-    template: 
+    template:
       src: etcd-external.yaml.j2
       dest: /etc/kubernetes/manifests/etcd-external.yaml
       owner: root
@@ -55,7 +55,7 @@
   when: inventory_hostname in (groups['etcd'] + groups['new-etcd'])
 
 - name: 读取 kubelet.conf 文件 stat 信息
-  stat: 
+  stat:
     path: /etc/kubernetes/kubelet.conf
   register: kubelet_conf_stat
 
@@ -78,7 +78,7 @@
     when: container_manager_detected == 'containerd'
 
   - name: 生成临时 kubelet unit 文件
-    template: 
+    template:
       src: 20-kubelet-override.conf.j2
       dest: /etc/systemd/system/kubelet.service.d/20-kubelet-override.conf
       owner: root
@@ -94,7 +94,7 @@
       state: restarted
       enabled: yes
 
-  when: 
+  when:
   - inventory_hostname in (groups['etcd'] + groups['new-etcd'])
   - not kubelet_conf_stat.stat.exists
 
@@ -106,7 +106,7 @@
 
 - block:
   - name: 移除临时 kubelet unit 文件
-    file: 
+    file:
       name: /etc/systemd/system/kubelet.service.d/20-kubelet-override.conf
       state: absent
 
@@ -118,26 +118,26 @@
       name: kubelet
       state: stopped
       enabled: yes
-  when: 
-  - inventory_hostname in (groups['kube-master'] + groups['kube-worker'] + groups['new-master'] + groups['new-worker']) 
+  when:
+  - inventory_hostname in (groups['kube-master'] + groups['kube-worker'] + groups['new-master'] + groups['new-worker'])
   - not kubelet_conf_stat.stat.exists
 
 - block:
   - name: 第一个 etcd 节点创建 etcd 备份工具
-    template: 
+    template:
       src: etcdtools.j2
       dest: /etc/kubernetes/backup/etcd/etcdtools
       owner: root
       mode: 0755
   - name: 第一个 etcd 节点创建 etcd 定时备份 crontab
-    cron: 
+    cron:
       minute: "0"
       hour: "{{ etcd_backup_hour }}"
       name: Backup etcd databases
       job: >
         /etc/kubernetes/backup/etcd/etcdtools backup
   - name: 第一个 etcd 节点创建清理 etcd 定时备份文件 crontab
-    cron: 
+    cron:
       minute: "30"
       hour: "{{ etcd_backup_hour }}"
       name: Clean etcd databases backup file

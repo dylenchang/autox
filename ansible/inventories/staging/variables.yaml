@@ -5,8 +5,8 @@
 # skip_verify_node: false
 
 # # 代理设置，若节点不能直接访问公网，可使用下面变量设置代理。
-# http_proxy: 
-# https_proxy: 
+# http_proxy:
+# https_proxy:
 # no_proxy: 192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,127.0.0.1,localhost
 
 # # 是否禁用防护墙
@@ -45,7 +45,7 @@
 # # 自定义hosts记录
 # # 举例：
 # # custom_hosts:
-# #   "127.0.0.1": 
+# #   "127.0.0.1":
 # #   - "one.domain.custom.local"
 # #   - "tow.domain.custom.local"
 # custom_hosts: {}
@@ -95,7 +95,7 @@
 # containerd_extra_args: ""
 
 # # 国内镜像加速(若不需要加速，请将值删去，键保留)
-# docker_mirror: 
+# docker_mirror:
 # - "https://reg-mirror.qiniu.com"
 # - "https://hub-mirror.c.163.com"
 # - "https://docker.mirrors.ustc.edu.cn"
@@ -279,7 +279,7 @@
 # # Kubelet 根目录
 # kubelet_root_dir: "/var/lib/kubelet"
 
-# ## 存入 Etcd 时的 Secret 进行静态加密 
+# ## 存入 Etcd 时的 Secret 进行静态加密
 # # 仅支持: aescbc, secretbox 或 aesgcm
 # kube_encryption_algorithm: "aescbc"
 # # 将Secret数据加密存储到etcd中的配置文件，下面加密码由 head -c 32 /dev/urandom | base64 生成
@@ -306,7 +306,7 @@
 #     resources: []
 
 # # 1.10+ admission plugins
-# kube_apiserver_enable_admission_plugins: 
+# kube_apiserver_enable_admission_plugins:
 # - NodeRestriction
 # # - AlwaysPullImages
 
@@ -401,7 +401,7 @@
 # # kubernetes-dashboard 相关参数配置
 # # ------------------------ #
 
-# # 是否启用kubernetes-dashboard 
+# # 是否启用kubernetes-dashboard
 # kubernetesui_dashboard_enabled: false
 
 # # kubernetes-dashboard默认证书有效期
@@ -412,7 +412,7 @@
 # kubernetesui_metrics_scraper_image: "{{ kube_image_repository }}/kubernetesui_metrics-scraper:v1.0.8"
 
 # # ------------------------ #
-# # metrics-server 相关参数配置 
+# # metrics-server 相关参数配置
 # # ------------------------ #
 
 # # 是否启用metrics-server

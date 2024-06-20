@@ -69,9 +69,9 @@
   assert:
     that: lb_kube_apiserver_port|int != 6443
     msg: "当前 {{ inventory_hostname }} 节点 6443 端口已使用，请更换端口。"
-  when: 
+  when:
   - lb_kube_apiserver_ip is not defined
-  - inventory_hostname in ((groups['kube-master'] + groups['new-master'])|unique) 
+  - inventory_hostname in ((groups['kube-master'] + groups['new-master'])|unique)
 
 - block:
   - name: 校验 lb 节点组设置节点是否满足要求
@@ -86,8 +86,8 @@
       msg: "lb 节点与 master 节点有复用情况，lb_kube_apiserver_port 请勿使用6443端口。"
     when:
     - inventory_hostname in groups['lb']
-    - inventory_hostname in ((groups['kube-master'] + groups['new-master'])|unique) 
-  when: 
+    - inventory_hostname in ((groups['kube-master'] + groups['new-master'])|unique)
+  when:
   - lb_mode != 'slb'
   - lb_kube_apiserver_ip is defined
 

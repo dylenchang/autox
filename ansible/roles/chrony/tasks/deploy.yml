@@ -13,7 +13,7 @@
       {%- endif -%}
 
 - name: 创建 chrony、kubelet 相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -22,7 +22,7 @@
   - /etc/systemd/system/kubelet.service.d
 
 - name: 读取 kubelet.conf 文件 stat 信息
-  stat: 
+  stat:
     path: /etc/kubernetes/kubelet.conf
   register: kubelet_conf_stat
 
@@ -45,7 +45,7 @@
     when: container_manager_detected == 'containerd'
 
   - name: 生成临时 kubelet unit 文件
-    template: 
+    template:
       src: 20-kubelet-override.conf.j2
       dest: /etc/systemd/system/kubelet.service.d/20-kubelet-override.conf
       owner: root
@@ -61,7 +61,7 @@
       state: restarted
       enabled: yes
 
-  when: 
+  when:
   - not kubelet_conf_stat.stat.exists
 
 - name: 判断 chrony 是否早已安装
@@ -83,7 +83,7 @@
   - "{{ pod_infra_container_image }}"
 
 - name: 生成 chrony static pod 文件
-  template: 
+  template:
     src: chrony.yaml.j2
     dest: /etc/kubernetes/manifests/chrony.yaml
     owner: root
@@ -91,7 +91,7 @@
 
 - block:
   - name: 移除临时 kubelet unit 文件
-    file: 
+    file:
       name: /etc/systemd/system/kubelet.service.d/20-kubelet-override.conf
       state: absent
 
@@ -104,6 +104,6 @@
       name: kubelet
       state: stopped
       enabled: yes
-  when: 
+  when:
   - not kubelet_conf_stat.stat.exists
   - inventory_hostname in (groups['kube-master'] + groups['kube-worker'] + groups['new-master'] + groups['new-worker'])

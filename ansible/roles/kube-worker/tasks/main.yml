@@ -13,7 +13,7 @@
       {%- endif -%}
 
 - name: 创建 kubernetes 相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -27,7 +27,7 @@
   register: kubelet_conf_stat
 
 - include_tasks: "{{ (role_path + '/../kube-master/tasks/kubeadm-config.yml') | realpath  }}"
-  when: 
+  when:
   - inventory_hostname in (groups['kube-worker'] + groups['new-worker'])
   - inventory_hostname not in (groups['kube-master'] + groups['new-master'])
 
@@ -40,10 +40,10 @@
 
   - name: Worker 节点加入集群
     shell: >
-      kubeadm join --config /etc/kubernetes/kubeadm-config.yaml 
+      kubeadm join --config /etc/kubernetes/kubeadm-config.yaml
       --ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests,FileAvailable--etc-kubernetes-pki-ca.crt
 
-  when: 
+  when:
   - inventory_hostname in (groups['kube-worker'] + groups['new-worker'])
   - inventory_hostname not in (groups['kube-master'] + groups['new-master'])
   - not kubelet_conf_stat.stat.exists
@@ -56,14 +56,14 @@
       owner: root
       mode: 0644
     register: configuration_result
-  
+
   - name: 启动/重启 kubelet
     service:
       name: kubelet
       state: restarted
       enabled: yes
     when: configuration_result.changed
-  when: 
+  when:
   - inventory_hostname in (groups['kube-worker'] + groups['new-worker'])
   - inventory_hostname not in (groups['kube-master'] + groups['new-master'])
 
@@ -73,6 +73,6 @@
 #     kubectl taint nodes {{inventory_hostname}} node-role.kubernetes.io/control-plane-
 #   delegate_to: "{{ groups['kube-master'][0] }}"
 #   ignore_errors: yes
-#   when: 
+#   when:
 #   - inventory_hostname in (groups['kube-worker'] + groups['new-worker'])
-#   - inventory_hostname in (groups['kube-master'] + groups['new-master']) 
+#   - inventory_hostname in (groups['kube-master'] + groups['new-master'])

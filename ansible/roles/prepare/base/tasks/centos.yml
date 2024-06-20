@@ -1,6 +1,6 @@
 # - name: 删除centos默认安装
-#   yum: 
-#     name: 
+#   yum:
+#     name:
 #     - firewalld
 #     - python-firewall
 #     - firewalld-filesystem
@@ -18,7 +18,7 @@
     shell: >
       systemctl is-active firewalld || echo "not be found"
     register: firewalld_already_installed
-  
+
   - name: 禁用防火墙
     service:
       name: firewalld
@@ -70,8 +70,8 @@
   when: not ( ansible_distribution is regex "openEuler" )
 
 - name: 安装基础软件包
-  yum: 
-    name: 
+  yum:
+    name:
     - jq                              # 轻量JSON处理程序
     - git
     - htop

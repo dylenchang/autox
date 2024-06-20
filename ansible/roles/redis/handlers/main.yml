@@ -1,0 +1,10 @@
+---
+- name: Restart Redis in Debian
+  ansible.builtin.service:
+    name: redis-server
+    state: restarted
+
+- name: Restart Redis in CentOS
+  ansible.builtin.service:
+    name: redis
+    state: restarted

@@ -111,7 +111,7 @@ apiServer:
 {% for sub_domain in kube_dns_domain.split('.') %}
 {% set outer_loop = loop %}
   - kubernetes.default.svc.{% for domain in kube_dns_domain.split('.') %}{% if loop.index <= outer_loop.index %}{{ domain }}{% if loop.index < outer_loop.index %}.{% endif %}{% endif %}{% endfor %}
-  
+
 {% endfor %}
 {% if hostvars[inventory_hostname]['ansible_host'] is defined %}
 {% for host in (groups['kube-master'] + groups['new-master']| default([])) | unique %}
@@ -129,7 +129,7 @@ apiServer:
 {% endif %}
 {% for host in (groups['kube-master'] + groups['new-master'] | default([])) | unique %}
   - {% if hostvars[host]['ansible_host'] is defined %}{{ hostvars[host]['ansible_host'] }}{% else %}{{ host }}{% endif %}
-  
+
 {% endfor %}
 {% for ip in kube_master_external_ip %}
   - {{ ip }}
@@ -234,7 +234,7 @@ systemReserved:
 {% endif %}
 evictionPressureTransitionPeriod: 5m0s
 failSwapOn: true
-featureGates: 
+featureGates:
   RotateKubeletServerCertificate: true
 fileCheckFrequency: 20s
 hairpinMode: promiscuous-bridge

@@ -1,5 +1,5 @@
 # 所有节点卸载安装
-- hosts: 
+- hosts:
   - all
   vars_prompt:
     name: "reset_confirmation"

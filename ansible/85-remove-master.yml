@@ -1,4 +1,4 @@
-- hosts: 
+- hosts:
   - del-master
   vars_prompt:
     name: "restore_confirmation"

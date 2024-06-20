@@ -5,21 +5,21 @@
 # - name: 设置 kubeadm api version 为 v1beta1
 #   set_fact:
 #     kubeadmConfig_api_version: v1beta1
-#   when: 
+#   when:
 #   - kubeadm_version_output.stdout is version('v1.13.0', '>=')
 #   - kubeadm_version_output.stdout is version('v1.15.0', '<')
 
 # - name: 设置 kubeadm api version 为 v1beta2
 #   set_fact:
 #     kubeadmConfig_api_version: v1beta2
-#   when: 
+#   when:
 #   - kubeadm_version_output.stdout is version('v1.15.0', '>=')
 #   - kubeadm_version_output.stdout is version('v1.22.0', '<')
 
 # - name: 设置 kubeadm api version 为 v1beta3
 #   set_fact:
 #     kubeadmConfig_api_version: v1beta3
-#   when: 
+#   when:
 #   - kubeadm_version_output.stdout is version('v1.22.0', '>=')
 
 - name: 删除不需要的参数 iptables.max
@@ -87,7 +87,7 @@
     {% if kube_upgrade_version.split('.')[1]|int == 14 %}
     experimental-control-plane
     {% endif %}
-  when: 
+  when:
   - inventory_hostname != groups['kube-master'][0]
   - inventory_hostname in (groups['kube-master'] + groups['new-master'])
 
@@ -97,6 +97,6 @@
     {% if kube_upgrade_version.split('.')[1]|int == 14 %}
     config --kubelet-version {{ kube_upgrade_version }}
     {% endif %}
-  when: 
+  when:
   - inventory_hostname in (groups['kube-worker'] + groups['new-worker'])
   - inventory_hostname not in (groups['kube-master'] + groups['new-master'])

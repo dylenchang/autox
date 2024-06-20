@@ -1,7 +1,7 @@
 # # 删除默认安装
 # - name: 删除ubuntu默认安装
-#   apt: 
-#     name: 
+#   apt:
+#     name:
 #       - ufw
 #       - lxd
 #       - lxd-client
@@ -14,7 +14,7 @@
     shell: >
       systemctl is-active ufw | grep active || echo "not be found"
     register: ufw_already_installed
-  
+
   - name: 禁用防火墙
     service:
       name: ufw
@@ -30,21 +30,21 @@
 #   - update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 #   - update-alternatives --set arptables /usr/sbin/arptables-legacy
 #   - update-alternatives --set ebtables /usr/sbin/ebtables-legacy
-#   when: 
+#   when:
 #   - >-
 #     (ansible_distribution == "Debian" and ansible_distribution_version is version('10', '>=')) or
 #     (ansible_distribution == "Ubuntu" and ansible_distribution_version is version('19', '>='))
-#   - "nftables_to_iptables | default(True) | bool" 
+#   - "nftables_to_iptables | default(True) | bool"
 
 - name: 添加基础 Apt 仓库
   apt_repository:
     repo: "{{ base_apt_repo }}"
     state: present
   when: base_apt_repo is defined and base_apt_repo != None
-  
+
 # Ubuntu 安装基础软件包
 - name: 安装 ubuntu 基础软件
-  apt: 
+  apt:
     name:
     - jq                          # 轻量JSON处理程序，安装docker查询镜像需要
     - git

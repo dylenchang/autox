@@ -1,6 +1,6 @@
 - block:
   - name: 创建 cni 相关目录
-    file: 
+    file:
       name: /etc/kubernetes/plugins/network-plugin
       state: directory
 
@@ -10,6 +10,6 @@
   - include_tasks: calico.yml
     when: network_plugin == 'calico'
 
-  when: 
+  when:
   - network_plugins_enabled|bool
   - inventory_hostname == groups['kube-master'][0]

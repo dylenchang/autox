@@ -13,7 +13,7 @@
           NO_PROXY: "{{ no_proxy | default ('') }}"
       no_log: true
 
-- hosts: 
+- hosts:
   - new-worker
   roles:
   - prepare/variables
@@ -23,14 +23,14 @@
   environment: "{{ proxy_env }}"
 
 # 进行apiserver负载均衡
-- hosts: 
+- hosts:
   - new-worker
   roles:
   - prepare/variables
   - load-balancer
 
 # 生成master节点证书
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   - kube-worker
@@ -40,14 +40,14 @@
   - kube-certificates
 
 # 初始化worker节点
-- hosts: 
+- hosts:
   - new-worker
   roles:
   - prepare/variables
   - kube-worker
 
 # 标记各节点角色
-- hosts: 
+- hosts:
   - new-worker
   roles:
   - prepare/variables

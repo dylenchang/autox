@@ -1,5 +1,5 @@
 # 校验节点软件系统及硬件系统、安装必要基础组件、docker、kubeadm、kubelet、kubectl
-- hosts: 
+- hosts:
   - all
   gather_facts: false
   tasks:
@@ -14,7 +14,7 @@
           NO_PROXY: "{{ no_proxy | default ('') }}"
       no_log: true
 
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables
@@ -24,20 +24,20 @@
   environment: "{{ proxy_env }}"
 
 # 进行 apiserver 负载均衡
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables
   - load-balancer
 
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables
   - chrony
 
 # 安装 etcd，并分发etcd证书到master节点
-- hosts: 
+- hosts:
   - etcd
   - new-etcd
   - kube-master
@@ -48,7 +48,7 @@
   - etcd/install
 
 # 生成 kubernetes 所需证书证书
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   - kube-worker
@@ -58,7 +58,7 @@
   - kube-certificates
 
 # 初始化master节点
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   roles:
@@ -66,7 +66,7 @@
   - kube-master
 
 # 初始化worker节点
-- hosts: 
+- hosts:
   - kube-worker
   - new-worker
   roles:
@@ -74,7 +74,7 @@
   - kube-worker
 
 # 标记各节点角色
-- hosts: 
+- hosts:
   - kube-master
   - kube-worker
   - new-master
@@ -84,7 +84,7 @@
   - post
 
 # 安装基础插件
-- hosts: 
+- hosts:
   - kube-master[0]
   roles:
   - prepare/variables

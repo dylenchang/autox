@@ -1,5 +1,5 @@
 # 安装etcd，并分发etcd证书到master节点
-- hosts: 
+- hosts:
   - etcd
   - new-etcd
   - kube-master

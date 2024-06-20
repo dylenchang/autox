@@ -35,7 +35,7 @@
     kubernetes_latest_back_dir: "{{ kubernetes_back_dirs.files | sort(attribute='ctime',reverse=true) | first }}"
 
 - name: 清理相关目录
-  file: 
+  file:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -44,7 +44,7 @@
   - "{{ kubelet_root_dir }}"
 
 - name: 确认 kubernetes 相关目录存在
-  file: 
+  file:
     name: "{{ item }}"
     state: directory
   with_items:
@@ -101,7 +101,7 @@
 
 - block:
   - name: 确认 etcd 数据相关目录存在
-    file: 
+    file:
       name: "{{ item }}"
       state: directory
     with_items:
@@ -132,16 +132,16 @@
       -v {{ etcd_data_dir|dirname }}:{{ etcd_data_dir|dirname }}
       --rm {{ etcd_image }}
       {% endif %}
-      etcdctl snapshot restore 
+      etcdctl snapshot restore
       /etc/kubernetes/backup/etcd/etcd-snapshot-latest.db
       --data-dir={{ etcd_data_dir }}
       --name=etcd-{{ inventory_hostname }}
       --initial-cluster={{ etcd_initial_cluster }}
       --initial-cluster-token=etcd-cluster-token
       --initial-advertise-peer-urls=https://{{ current_host_ip }}:2380
-  
+
   - name: 移除各节点临时 etcd 备份文件
-    file: 
+    file:
       name: /etc/kubernetes/backup/etcd/etcd-snapshot-latest.db
       state: absent
 
@@ -149,7 +149,7 @@
 
 - block:
   - name: 创建 kubeconfig 目录
-    file: 
+    file:
       name: "{{ item }}"
       state: directory
     with_items:

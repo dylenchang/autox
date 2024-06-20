@@ -1,4 +1,4 @@
-- hosts: 
+- hosts:
   - del-etcd
   vars_prompt:
     name: "restore_confirmation"
@@ -15,13 +15,13 @@
   - remove/etcd
 
 # 删除etcd节点后刷新master节点kubeadm配置
-- hosts: 
+- hosts:
   - kube-master
   roles:
   - prepare/variables
   - kube-master
 
-- hosts: 
+- hosts:
   - kube-master
   roles:
   - prepare/variables
@@ -30,13 +30,13 @@
     shell: >
       kubeadm upgrade apply --config=/etc/kubernetes/kubeadm-config.yaml --force --ignore-preflight-errors=ImagePull
     when: inventory_hostname == groups['kube-master'][0]
-  
+
   - name: "更新 master 节点：{{ inventory_hostname }} 的配置"
     shell: >
       kubeadm upgrade node
       {% if kube_version.split('.')[1]|int == 13 %}
       experimental-control-plane
       {% endif %}
-    when: 
+    when:
     - inventory_hostname != groups['kube-master'][0]
     - inventory_hostname in groups['kube-master']

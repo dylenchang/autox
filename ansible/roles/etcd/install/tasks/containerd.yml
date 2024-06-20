@@ -43,7 +43,7 @@
   retries: 12
   delay: 5
   delegate_to: "{{ groups['etcd'][0] }}"
-  when: 
+  when:
   - inventory_hostname in groups['new-etcd']
   - inventory_hostname not in etcd_member_list.stdout
 

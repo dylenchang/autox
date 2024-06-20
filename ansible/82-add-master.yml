@@ -13,7 +13,7 @@
           NO_PROXY: "{{ no_proxy | default ('') }}"
       no_log: true
 
-- hosts: 
+- hosts:
   - new-master
   roles:
   - prepare/variables
@@ -23,14 +23,14 @@
   environment: "{{ proxy_env }}"
 
 # 进行apiserver负载均衡
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables
   - load-balancer
 
 # 分发 etcd client 证书
-- hosts: 
+- hosts:
   - etcd
   - kube-master
   - new-master
@@ -39,7 +39,7 @@
   - etcd/certificates
 
 # 生成master节点证书
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   - kube-worker
@@ -49,7 +49,7 @@
   - kube-certificates
 
 # 初始化master节点
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   roles:
@@ -58,7 +58,7 @@
   - kube-worker
 
 # 标记各节点角色
-- hosts: 
+- hosts:
   - new-master
   roles:
   - prepare/variables

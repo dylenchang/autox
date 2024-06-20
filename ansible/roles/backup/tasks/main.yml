@@ -14,7 +14,7 @@
 
 - block:
   - name: 第一个 etcd 节点创建 etcd 备份目录
-    file: 
+    file:
       name: /etc/kubernetes/backup/etcd
       state: directory
 
@@ -40,15 +40,15 @@
       -v /etc/kubernetes/pki/etcd/:/etc/kubernetes/pki/etcd/
       --rm {{ etcd_image }}
       {% endif %}
-      etcdctl snapshot save 
-      /etc/kubernetes/backup/etcd/etcd-snapshot-$(date '+%Y%m%dT%H%M%S').db 
-      --cacert=/etc/kubernetes/pki/etcd/ca.crt 
-      --key=/etc/kubernetes/pki/etcd/healthcheck-client.key 
+      etcdctl snapshot save
+      /etc/kubernetes/backup/etcd/etcd-snapshot-$(date '+%Y%m%dT%H%M%S').db
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt
+      --key=/etc/kubernetes/pki/etcd/healthcheck-client.key
       --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt
   when: inventory_hostname == groups['etcd'][0]
 
 - name: 所有节点创建 kubelet 备份目录
-  file: 
+  file:
     name: /etc/kubernetes/backup/kubelet
     state: directory
 
@@ -81,9 +81,9 @@
 
 - name: 读取所有备份目录
   find:
-    paths: /tmp 
+    paths: /tmp
     file_type: directory
-    patterns: kubernetes.orig.* 
+    patterns: kubernetes.orig.*
   register: kubernetes_back_dirs
 
 - name: 获取最新备份目录

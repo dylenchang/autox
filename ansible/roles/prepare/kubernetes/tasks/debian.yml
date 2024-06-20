@@ -14,7 +14,7 @@
     state: present
 
 - name: 安装 kubeadm kubelet kubectl
-  apt: 
+  apt:
     name:
     - "kubectl={{ kube_version }}-1.1"
     - "kubelet={{ kube_version }}-1.1"

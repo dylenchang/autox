@@ -14,7 +14,7 @@
     state: present
 
 - name: 安装 Docker
-  apt: 
+  apt:
     name:
     - "docker-ce={{ docker_version }}~ce~3-0~{{ ansible_distribution | lower }}"
     state: present
@@ -22,7 +22,7 @@
   when: docker_version is version('18.09', '<')
 
 - name: 安装 Docker
-  apt: 
+  apt:
     name:
     - "docker-ce=5:{{ docker_version }}~3-0~{{ ansible_distribution | lower }}-{{ ansible_distribution_release }}"
     - "docker-ce-cli=5:{{ docker_version }}~3-0~{{ ansible_distribution | lower }}-{{ ansible_distribution_release }}"

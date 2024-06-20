@@ -1,5 +1,5 @@
 # 生成kubernetes属性证书
-- hosts: 
+- hosts:
   - kube-master
   - new-master
   - kube-worker

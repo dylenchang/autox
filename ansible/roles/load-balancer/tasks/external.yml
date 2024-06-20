@@ -1,5 +1,5 @@
 - name: 确认没有运行其他负载均衡器
-  file: 
+  file:
     name: "{{ item }}"
     state: absent
   with_items:

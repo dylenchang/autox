@@ -1,3 +1,6 @@
 ---
-- import_playbook: hosts.yml
-- import_playbook: nvm.yml
+- name: 安装redis
+  hosts: all
+  become: true
+  roles:
+    - redis

@@ -10,7 +10,7 @@
     ansible_connection: local
 
 # 备份各节点相关数据及文件
-- hosts: 
+- hosts:
   - all
   roles:
   - prepare/variables

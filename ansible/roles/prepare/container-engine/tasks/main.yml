@@ -12,37 +12,37 @@
   shell: >
     systemctl is-active cri-dockerd || echo "not running"
   register: cri_docker_already_running
-  when: 
+  when:
   - container_manager == "docker"
 
 - include_tasks: docker/main.yml
-  when: 
+  when:
   - container_manager == "docker"
   - docker_already_running.stdout != "active"
   - containerd_already_running.stdout != "active"
 
 - include_tasks: docker/main.yml
-  when: 
+  when:
   - container_manager == "docker"
   - "restar_container_manager_force | default(True) | bool"
 
 - include_tasks: docker/cri-docker.yml
-  when: 
+  when:
   - container_manager == "docker"
   - cri_docker_already_running.stdout != "active"
 
 - include_tasks: docker/cri-docker.yml
-  when: 
+  when:
   - container_manager == "docker"
   - "restar_container_manager_force | default(True) | bool"
 
 - include_tasks: containerd/main.yml
-  when: 
+  when:
   - container_manager == "containerd"
   - docker_already_running.stdout != "active"
   - containerd_already_running.stdout != "active"
 
 - include_tasks: containerd/main.yml
-  when: 
+  when:
   - container_manager == "containerd"
   - "restar_container_manager_force | default(True) | bool"

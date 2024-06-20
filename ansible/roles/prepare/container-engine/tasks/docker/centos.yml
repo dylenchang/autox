@@ -10,7 +10,7 @@
 
 - name: 安装 Docker
   yum:
-    name: 
+    name:
     - "docker-ce-{{ docker_version }}.ce"
     state: present
     enablerepo: docker-ce-stable
@@ -18,7 +18,7 @@
 
 - name: 安装 Docker
   yum:
-    name: 
+    name:
     - "docker-ce-{{ docker_version }}"
     - "docker-ce-cli-{{ docker_version }}"
     - "containerd.io-{{ containerd_version.split('-')[0] }}"

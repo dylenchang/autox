@@ -44,10 +44,14 @@ executor = ThreadPoolExecutor(max_workers=10)
 
 
 def run_playbook():
-    process = subprocess.Popen(['ansible-playbook', '/opt/project/autox/ansible/site.yml'], stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE, text=True)
+    process = subprocess.Popen(
+        ["ansible-playbook", "/opt/project/autox/ansible/site.yml"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
     output = []
-    for line in iter(process.stdout.readline, ''):
+    for line in iter(process.stdout.readline, ""):
         output.append(line)
     process.stdout.close()
     process.wait()
@@ -72,5 +76,5 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.close()
 
 
-if __name__ == '__main__':
-    uvicorn.run(app, port=9999, host='0.0.0.0')
+if __name__ == "__main__":
+    uvicorn.run(app, port=9999, host="0.0.0.0")
