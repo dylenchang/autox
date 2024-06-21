@@ -1,4 +1,5 @@
 """Global exception handler"""
+
 import http
 
 from fastapi import Request
@@ -17,7 +18,7 @@ from toolbox.starter.system.enum.system import SystemResponseCode
 
 
 @app.exception_handler(Exception)
-async def service_exception_handler(request: Request, exc: Exception):
+async def global_exception_handler(request: Request, exc: Exception):
     """
     Asynchronous Exception handler
     :param request: The request instance containing all request details
@@ -32,7 +33,7 @@ async def service_exception_handler(request: Request, exc: Exception):
         return Response(status_code=status_code, headers=headers)
     return JSONResponse(
         {"code": SystemResponseCode.SERVICE_INTERNAL_ERROR.code, "msg": str(exc)},
-        status_code=status_code
+        status_code=status_code,
     )
 
 

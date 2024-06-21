@@ -1,5 +1,5 @@
 """Inventory operation controller"""
-import subprocess
+
 from typing import List, Dict
 
 from fastapi import APIRouter, Depends, WebSocket
@@ -9,7 +9,6 @@ from starlette.websockets import WebSocketDisconnect
 from toolbox.common.result import result
 from toolbox.common.schema.schema import CurrentUser
 from toolbox.common.security.security import get_current_user
-from toolbox.starter.system.exception.system import SystemException
 from toolbox.starter.system.factory.service_factory import get_inventory_service
 from toolbox.starter.system.model.inventory_do import InventoryDO
 from toolbox.starter.system.schema.inventory_schema import InventoryCreateCmd
@@ -21,8 +20,8 @@ inventory_service: InventoryService = get_inventory_service()
 
 @inventory_router.post("/")
 async def create_inventory(
-        inventory_create_cmd: InventoryCreateCmd,
-        current_user: CurrentUser = Depends(get_current_user()),
+    inventory_create_cmd: InventoryCreateCmd,
+    current_user: CurrentUser = Depends(get_current_user()),
 ) -> Dict:
     """
     Creates a new inventory with the provided data.
@@ -41,14 +40,16 @@ async def create_inventory(
         await inventory_service.ping_ip(ip_address=ipv4_address)
     if ipv6_address:
         await inventory_service.ping_ip(ip_address=ipv6_address)
-    inventory: InventoryDO = await inventory_service.save(record=InventoryDO(**inventory_create_cmd.model_dump()))
+    inventory: InventoryDO = await inventory_service.save(
+        record=InventoryDO(**inventory_create_cmd.model_dump())
+    )
     return result.success(data=inventory.id)
 
 
 @inventory_router.post("/inventories")
 async def get_inventory(
-        ids: List[int],
-        current_user: CurrentUser = Depends(get_current_user()),
+    ids: List[int],
+    current_user: CurrentUser = Depends(get_current_user()),
 ) -> dict:
     """
     Retrieves inventories by a list of ID.
@@ -66,17 +67,21 @@ async def get_inventory(
 
 
 @inventory_router.websocket("/ping")
-async def ping_test(websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)):
+async def ping_test(
+    websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
+):
     await websocket.accept()
     try:
         while True:
             data = await websocket.receive_json()
             ids = data.get("ids", [])
             if not isinstance(ids, list):
-                await websocket.send_json({"error": "Invalid input, 'ids' should be a list of integers."})
+                await websocket.send_json(
+                    {"error": "Invalid input, 'ids' should be a list of integers."}
+                )
                 continue
             process = await inventory_service.ping_test(ids=ids)
-            for line in iter(process.stdout.readline, ''):
+            for line in iter(process.stdout.readline, ""):
                 await websocket.send_text(line)
             process.stdout.close()
             process.wait()

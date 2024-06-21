@@ -18,4 +18,5 @@ class SystemException(ServiceException):
 
 class PingException(Exception):
     """Custom exception for ping failures."""
+
     pass
