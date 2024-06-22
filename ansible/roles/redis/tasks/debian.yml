@@ -24,7 +24,7 @@
     regexp: 'protected-mode yes'
     line: "protected-mode no"
     state: present
-    notify: Restart Redis in Debian
+  notify: Restart Redis in Debian
 
 - name: 确保Redis在Debian系统正常运行
   ansible.builtin.service:
