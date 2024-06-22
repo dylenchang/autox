@@ -1,4 +1,4 @@
 [redis]
 {% for host in hosts %}
-ansible_host={{ host.ipv4_address }} ansible_become_password={{ host.become_password }}
+{{ host.ipv4_address }}  ansible_user={{ host.user }} ansible_password={{ host.password }} ansible_become_password={{ host.become_password }} ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 {% endfor %}
