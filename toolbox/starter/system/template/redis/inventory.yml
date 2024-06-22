@@ -1,0 +1,4 @@
+[redis]
+{% for host in hosts %}
+ansible_host={{ host.ipv4_address }} ansible_become_password={{ host.become_password }}
+{% endfor %}
