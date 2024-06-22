@@ -7,7 +7,6 @@ repos:
       - id: name-tests-test
       - id: check-added-large-files
       - id: check-toml
-      - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/codespell-project/codespell

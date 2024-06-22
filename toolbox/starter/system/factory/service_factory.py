@@ -6,6 +6,11 @@ from toolbox.starter.system.mapper.goods_mapper import goodsMapper
 from toolbox.starter.system.mapper.inventory_mapper import inventoryMapper
 from toolbox.starter.system.mapper.user_mapper import userMapper
 from toolbox.starter.system.service.goods_service import GoodsService
+
+from toolbox.starter.system.service.bare_metal_service import BareMetalService
+from toolbox.starter.system.service.impl.bare_metal_service_impl import (
+    BareMetalServiceImpl,
+)
 from toolbox.starter.system.service.impl.goods_service_impl import GoodsServiceImpl
 from toolbox.starter.system.service.impl.inventory_service_impl import (
     InventoryServiceImpl,
@@ -17,6 +22,7 @@ from toolbox.starter.system.service.user_service import UserService
 _singleton_user_service_instance: Optional[UserService] = None
 _singleton_inventory_service_instance: Optional[InventoryService] = None
 _singleton_goods_service_instance: Optional[GoodsService] = None
+_singleton_bare_metal_service_instance: Optional[BareMetalService] = None
 
 
 def get_user_service(service_name: str = "default") -> UserService:
@@ -64,6 +70,22 @@ def get_goods_service(service_name: str = "default") -> GoodsService:
     if service_name == "default":
         if _singleton_goods_service_instance is None:
             _singleton_goods_service_instance = GoodsServiceImpl(mapper=goodsMapper)
+        return _singleton_goods_service_instance
+    else:
+        raise ValueError(f"Unknown service name: {service_name}")
+
+
+def get_bare_metal_service(service_name: str = "default") -> BareMetalService:
+    """
+    Return an instance of the BareMetalService implementation.
+
+    Returns:
+       BareMetalService: An instance of the BareMetalServiceImpl class.
+    """
+    global _singleton_goods_service_instance
+    if service_name == "default":
+        if _singleton_goods_service_instance is None:
+            _singleton_goods_service_instance = BareMetalServiceImpl(mapper=goodsMapper)
         return _singleton_goods_service_instance
     else:
         raise ValueError(f"Unknown service name: {service_name}")

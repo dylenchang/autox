@@ -1,4 +1,4 @@
-"""Goods domain service impl"""
+"""BareMetal domain service impl"""
 
 import io
 import subprocess
@@ -11,12 +11,12 @@ from toolbox.starter.system.factory.session_factory import db_session
 from toolbox.starter.system.mapper.goods_mapper import GoodsMapper
 from toolbox.starter.system.mapper.inventory_mapper import inventoryMapper
 from toolbox.starter.system.model.goods_do import GoodsDO
-from toolbox.starter.system.schema.goods_schema import RedisDeployCmd
-from toolbox.starter.system.service.goods_service import GoodsService
+from toolbox.starter.system.schema.bare_metal_schema import RedisDeployCmd
+from toolbox.starter.system.service.bare_metal_service import BareMetalService
 from toolbox.starter.system.template.template import get_template
 
 
-class GoodsServiceImpl(ServiceImpl[GoodsMapper, GoodsDO], GoodsService):
+class BareMetalServiceImpl(ServiceImpl[GoodsMapper, GoodsDO], BareMetalService):
     def __init__(self, mapper: GoodsMapper):
         """
         Initialize the UserServiceImpl instance.
@@ -80,5 +80,4 @@ class GoodsServiceImpl(ServiceImpl[GoodsMapper, GoodsDO], GoodsService):
                 text=True,
             )
         finally:
-            pass
-            # temp_dir.cleanup()
+            temp_dir.cleanup()
