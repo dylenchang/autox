@@ -1,0 +1,5 @@
+---
+- name: 在Debian系统安装Jre
+  ansible.builtin.apt:
+    name: "openjdk-{{ jdk_version }}-jre"
+    state: present

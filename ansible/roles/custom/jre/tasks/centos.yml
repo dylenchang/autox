@@ -1,0 +1,5 @@
+---
+- name: 在CentOS系统安装Jre
+  ansible.builtin.yum:
+    name: "java-{{ jdk_version }}-openjdk"
+    state: present

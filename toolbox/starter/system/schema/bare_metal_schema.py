@@ -12,3 +12,7 @@ class UserDeployCmd(BaseDeployCmd):
     user: str
     password: str
     group: str
+
+
+class JreDeployCmd(BaseDeployCmd):
+    version: str

@@ -8,7 +8,7 @@ from toolbox.common.util.ws import handle_playbook_result
 from toolbox.starter.system.factory.service_factory import (
     get_bare_metal_service,
 )
-from toolbox.starter.system.schema.bare_metal_schema import RedisDeployCmd, UserDeployCmd
+from toolbox.starter.system.schema.bare_metal_schema import RedisDeployCmd, UserDeployCmd, JreDeployCmd
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.bare_metal_service import BareMetalService
 
@@ -49,4 +49,16 @@ async def deploy_redis(
         req = await websocket.receive_text()
         userDeployCmd: UserDeployCmd = UserDeployCmd.parse_raw(req)
         process = await bare_metal_service.user_deploy(userDeployCmd)
+        await handle_playbook_result(process, websocket)
+
+
+@bare_metal_router.websocket("/jre")
+async def deploy_redis(
+        websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
+):
+    await websocket.accept()
+    while True:
+        req = await websocket.receive_text()
+        jreDeployCmd: JreDeployCmd = JreDeployCmd.parse_raw(req)
+        process = await bare_metal_service.jre_deploy(jreDeployCmd)
         await handle_playbook_result(process, websocket)

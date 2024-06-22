@@ -2,7 +2,7 @@
 
 from typing import List, Dict
 
-from fastapi import APIRouter, Depends, WebSocket
+from fastapi import APIRouter, Depends, WebSocket, Query
 from loguru import logger
 from starlette.websockets import WebSocketDisconnect
 
@@ -46,9 +46,9 @@ async def create_inventory(
     return result.success(data=inventory.id)
 
 
-@inventory_router.post("/inventories")
+@inventory_router.get("/inventories")
 async def get_inventory(
-    ids: List[int],
+    ids: List[int] = Query(...),
     current_user: CurrentUser = Depends(get_current_user()),
 ) -> dict:
     """
