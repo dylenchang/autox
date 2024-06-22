@@ -1,6 +1,0 @@
----
-- name: 安装{{ role_name }}
-  hosts: all
-  become: true
-  roles:
-    - {{ role_name }}

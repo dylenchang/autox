@@ -58,17 +58,3 @@ class InventoryServiceImpl(ServiceImpl[InventoryMapper, InventoryDO], InventoryS
         except subprocess.SubprocessError as e:
             raise PingException(f"Ping to {ip_address} failed with error: {e}")
 
-    async def ping_test(self, ids: List[int]):
-        async with db_session() as session:
-            inventory_records = await self.mapper.select_records_by_ids(
-                ids=ids, db_session=session
-            )
-        if (len(inventory_records)) == 0:
-            pass
-            # raise SystemException(SystemResponseCode.PARAMETER_ERROR.code, SystemResponseCode.PARAMETER_ERROR.msg)
-        return subprocess.Popen(
-            ["ansible-playbook", "/opt/project/autox/ansible/site.yml"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )

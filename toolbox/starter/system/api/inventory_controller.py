@@ -64,27 +64,3 @@ async def get_inventory(
         BaseResponse with a list of InventoryDO details.
     """
     return result.success(data=await inventory_service.retrieve_by_ids(ids=ids))
-
-
-@inventory_router.websocket("/ping")
-async def ping_test(
-    websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
-):
-    await websocket.accept()
-    try:
-        while True:
-            data = await websocket.receive_json()
-            ids = data.get("ids", [])
-            if not isinstance(ids, list):
-                await websocket.send_json(
-                    {"error": "Invalid input, 'ids' should be a list of integers."}
-                )
-                continue
-            process = await inventory_service.ping_test(ids=ids)
-            for line in iter(process.stdout.readline, ""):
-                await websocket.send_text(line)
-            process.stdout.close()
-            process.wait()
-            await websocket.send_text("Playbook execution finished.")
-    except WebSocketDisconnect:
-        logger.info("Client disconnected")
