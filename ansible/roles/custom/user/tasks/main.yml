@@ -1,0 +1,23 @@
+---
+- name: 创建用户组{{ group }}
+  ansible.builtin.group:
+    name: {{ group }}
+    state: present
+
+- name: 创建用户{{ user }}, 并添加到 {{ group }}用户组
+  ansible.builtin.user:
+    name: {{ user }}
+    password: "{{ user | password_hash('sha512') }}"
+    shell: /bin/bash
+    group: {{ group }}
+    append: yes
+    state: present
+  no_log: true
+
+- name: 使用户{{ user }}, 具有sudo权限
+  community.general.sudoers:
+    name: autox-do-as-root
+    state: present
+    user: {{ user }}
+    runas: root
+    commands: ALL
