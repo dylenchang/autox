@@ -82,10 +82,10 @@ def get_bare_metal_service(service_name: str = "default") -> BareMetalService:
     Returns:
        BareMetalService: An instance of the BareMetalServiceImpl class.
     """
-    global _singleton_goods_service_instance
+    global _singleton_bare_metal_service_instance
     if service_name == "default":
-        if _singleton_goods_service_instance is None:
-            _singleton_goods_service_instance = BareMetalServiceImpl(mapper=goodsMapper)
-        return _singleton_goods_service_instance
+        if _singleton_bare_metal_service_instance is None:
+            _singleton_bare_metal_service_instance = BareMetalServiceImpl()
+        return _singleton_bare_metal_service_instance
     else:
         raise ValueError(f"Unknown service name: {service_name}")

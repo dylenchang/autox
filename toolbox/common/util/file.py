@@ -2,12 +2,12 @@ import io
 import os
 import tempfile
 import zipfile
-from typing import Tuple, List, Any
+from typing import Tuple, List
 
 
 def generate_playbook_paths(
     zip_file_object: io.BytesIO,
-) -> Tuple[Any, str, str, str, List[str]]:
+) -> Tuple[tempfile.TemporaryDirectory, str, str, str, List[str]]:
     site_file = "site.yml"
     inventory_file = "inventories" + str(os.sep) + "inventory.ini"
     global_var_file = "global.yml"

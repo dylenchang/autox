@@ -11,6 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.utils import is_body_allowed_for_status_code
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import JSONResponse, Response
+from starlette.websockets import WebSocketDisconnect
 
 from toolbox.common.exception.exception import ServiceException
 from toolbox.starter.server import app
@@ -35,6 +36,11 @@ async def global_exception_handler(request: Request, exc: Exception):
         {"code": SystemResponseCode.SERVICE_INTERNAL_ERROR.code, "msg": str(exc)},
         status_code=status_code,
     )
+
+
+@app.exception_handler(WebSocketDisconnect)
+async def ws_exception_handler(request: Request, exc: WebSocketDisconnect):
+    pass
 
 
 @app.exception_handler(ServiceException)
