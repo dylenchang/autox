@@ -16,3 +16,8 @@ class UserDeployCmd(BaseDeployCmd):
 
 class JreDeployCmd(BaseDeployCmd):
     version: str
+
+
+class GithubHostDeployCmd(BaseDeployCmd):
+    host: str = "151.101.100.133"
+    host_backup: str = "185.199.111.133"

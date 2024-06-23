@@ -1,0 +1,12 @@
+---
+- name: 添加github域名解析
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ host }} raw.githubusercontent.com"
+
+- name: 添加github后备域名解析
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ host_backup }} raw.githubusercontent.com"
