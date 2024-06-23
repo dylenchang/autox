@@ -12,6 +12,7 @@ from toolbox.starter.system.schema.bare_metal_schema import (
     JreDeployCmd,
     GithubHostDeployCmd,
     NodejsDeployCmd,
+    NginxDeployCmd,
 )
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.bare_metal_service import BareMetalService
@@ -233,6 +234,33 @@ class BareMetalServiceImpl(BareMetalService, BaseDeployServiceImpl):
                 inventory_file_path,
                 "-e",
                 f"@{global_var_file_path}",
+                site_file_path,
+            ]
+            logger.info(" ".join(command))
+            return subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+        finally:
+            if configs.mode == ModeEnum.production:
+                temp_dir.cleanup()
+
+    async def nginx_deploy(self, nginxDeployCmd: NginxDeployCmd):
+        global temp_dir
+        try:
+            (
+                temp_dir,
+                inventory_file_path,
+                site_file_path,
+                global_var_file_path,
+                role_name,
+            ) = await self.base_deploy(nginxDeployCmd)
+            command = [
+                "ansible-playbook",
+                "-i",
+                inventory_file_path,
                 site_file_path,
             ]
             logger.info(" ".join(command))

@@ -26,3 +26,7 @@ class GithubHostDeployCmd(BaseDeployCmd):
 class NodejsDeployCmd(BaseDeployCmd):
     nvm_version: str = "0.39.7"
     node_version: str = "20.15.0"
+
+
+class NginxDeployCmd(BaseDeployCmd):
+    pass

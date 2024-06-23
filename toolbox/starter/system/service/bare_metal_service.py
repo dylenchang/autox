@@ -8,6 +8,7 @@ from toolbox.starter.system.schema.bare_metal_schema import (
     JreDeployCmd,
     GithubHostDeployCmd,
     NodejsDeployCmd,
+    NginxDeployCmd,
 )
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.base_deploy_service import BaseDeployService
@@ -25,3 +26,5 @@ class BareMetalService(BaseDeployService, ABC):
     async def github_host_deploy(self, githubHostDeployCmd: GithubHostDeployCmd): ...
 
     async def nodejs_deploy(self, nodejsDeployCmd: NodejsDeployCmd): ...
+
+    async def nginx_deploy(self, nginxDeployCmd: NginxDeployCmd): ...

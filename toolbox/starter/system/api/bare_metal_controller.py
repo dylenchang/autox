@@ -14,6 +14,7 @@ from toolbox.starter.system.schema.bare_metal_schema import (
     JreDeployCmd,
     GithubHostDeployCmd,
     NodejsDeployCmd,
+    NginxDeployCmd,
 )
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.bare_metal_service import BareMetalService
@@ -47,7 +48,7 @@ async def deploy_redis(
 
 
 @bare_metal_router.websocket("/user")
-async def deploy_redis(
+async def deploy_user(
     websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
 ):
     await websocket.accept()
@@ -59,7 +60,7 @@ async def deploy_redis(
 
 
 @bare_metal_router.websocket("/jre")
-async def deploy_redis(
+async def deploy_jre(
     websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
 ):
     await websocket.accept()
@@ -71,7 +72,7 @@ async def deploy_redis(
 
 
 @bare_metal_router.websocket("/github_host")
-async def deploy_redis(
+async def deploy_github_host(
     websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
 ):
     await websocket.accept()
@@ -83,7 +84,7 @@ async def deploy_redis(
 
 
 @bare_metal_router.websocket("/nodejs")
-async def deploy_redis(
+async def deploy_nodejs(
     websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
 ):
     await websocket.accept()
@@ -91,4 +92,16 @@ async def deploy_redis(
         req = await websocket.receive_text()
         nodejsDeployCmd: NodejsDeployCmd = NodejsDeployCmd.parse_raw(req)
         process = await bare_metal_service.nodejs_deploy(nodejsDeployCmd)
+        await handle_playbook_result(process, websocket)
+
+
+@bare_metal_router.websocket("/nginx")
+async def deploy_nginx(
+    websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
+):
+    await websocket.accept()
+    while True:
+        req = await websocket.receive_text()
+        nginxDeployCmd: NginxDeployCmd = NginxDeployCmd.parse_raw(req)
+        process = await bare_metal_service.nginx_deploy(nginxDeployCmd)
         await handle_playbook_result(process, websocket)
