@@ -1,6 +1,0 @@
----
-- name: 安装redis
-  hosts: all
-  become: true
-  roles:
-    - redis

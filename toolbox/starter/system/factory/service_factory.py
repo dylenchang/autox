@@ -15,14 +15,17 @@ from toolbox.starter.system.service.impl.goods_service_impl import GoodsServiceI
 from toolbox.starter.system.service.impl.inventory_service_impl import (
     InventoryServiceImpl,
 )
+from toolbox.starter.system.service.impl.k8s_service_impl import K8sServiceImpl
 from toolbox.starter.system.service.impl.user_service_impl import UserServiceImpl
 from toolbox.starter.system.service.inventory_service import InventoryService
+from toolbox.starter.system.service.k8s_service import K8sService
 from toolbox.starter.system.service.user_service import UserService
 
 _singleton_user_service_instance: Optional[UserService] = None
 _singleton_inventory_service_instance: Optional[InventoryService] = None
 _singleton_goods_service_instance: Optional[GoodsService] = None
 _singleton_bare_metal_service_instance: Optional[BareMetalService] = None
+_singleton_k8s_service_instance: Optional[K8sService] = None
 
 
 def get_user_service(service_name: str = "default") -> UserService:
@@ -87,5 +90,21 @@ def get_bare_metal_service(service_name: str = "default") -> BareMetalService:
         if _singleton_bare_metal_service_instance is None:
             _singleton_bare_metal_service_instance = BareMetalServiceImpl()
         return _singleton_bare_metal_service_instance
+    else:
+        raise ValueError(f"Unknown service name: {service_name}")
+
+
+def get_k8s_service(service_name: str = "default") -> K8sService:
+    """
+    Return an instance of the K8sService implementation.
+
+    Returns:
+       K8sService: An instance of the K8sServiceImpl class.
+    """
+    global _singleton_k8s_service_instance
+    if service_name == "default":
+        if _singleton_k8s_service_instance is None:
+            _singleton_k8s_service_instance = K8sServiceImpl()
+        return _singleton_k8s_service_instance
     else:
         raise ValueError(f"Unknown service name: {service_name}")

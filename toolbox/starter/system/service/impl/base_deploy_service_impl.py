@@ -11,7 +11,7 @@ from toolbox.starter.system.mapper.inventory_mapper import inventoryMapper
 from toolbox.starter.system.model.goods_do import GoodsDO
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.base_deploy_service import BaseDeployService
-from toolbox.starter.system.template.template import get_template
+from toolbox.starter.system.template.template import get_bare_metal_template
 
 
 class BaseDeployServiceImpl(BaseDeployService):
@@ -40,14 +40,16 @@ class BaseDeployServiceImpl(BaseDeployService):
         ) = generate_playbook_paths(zip_file_object)
         role_name = role_names[0]
         async with db_session() as session:
-            inventoryRecords = await inventoryMapper.select_records_by_ids(
+            inventory_records = await inventoryMapper.select_records_by_ids(
                 ids=baseDeployCmd.host_ids, db_session=session
             )
-        inventory_template = get_template(
+        inventory_template = get_bare_metal_template(
             self.common_template_dir, self.common_inventory_name
         )
-        site_template = get_template(self.common_template_dir, self.common_site_name)
-        inventory_content = inventory_template.render(hosts=inventoryRecords)
+        site_template = get_bare_metal_template(
+            self.common_template_dir, self.common_site_name
+        )
+        inventory_content = inventory_template.render(hosts=inventory_records)
         with open(inventory_file_path, "w", encoding="utf-8") as file:
             file.write(inventory_content)
         site_content = site_template.render(role_name=role_name)

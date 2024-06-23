@@ -15,6 +15,7 @@ from toolbox.starter.system.schema.bare_metal_schema import (
     GithubHostDeployCmd,
     NodejsDeployCmd,
     NginxDeployCmd,
+    MysqlDeployCmd,
 )
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.bare_metal_service import BareMetalService
@@ -23,15 +24,15 @@ bare_metal_router = APIRouter()
 bare_metal_service: BareMetalService = get_bare_metal_service()
 
 
-@bare_metal_router.websocket("/source")
-async def change_source(
+@bare_metal_router.websocket("/no_parm")
+async def deploy_no_parm(
     websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
 ):
     await websocket.accept()
     while True:
         req = await websocket.receive_text()
         baseDeployCmd: BaseDeployCmd = BaseDeployCmd.parse_raw(req)
-        process = await bare_metal_service.source_deploy(baseDeployCmd)
+        process = await bare_metal_service.no_parm_deploy(baseDeployCmd)
         await handle_playbook_result(process, websocket)
 
 
@@ -104,4 +105,16 @@ async def deploy_nginx(
         req = await websocket.receive_text()
         nginxDeployCmd: NginxDeployCmd = NginxDeployCmd.parse_raw(req)
         process = await bare_metal_service.nginx_deploy(nginxDeployCmd)
+        await handle_playbook_result(process, websocket)
+
+
+@bare_metal_router.websocket("/mysql")
+async def deploy_mysql(
+    websocket: WebSocket, current_user: CurrentUser = Depends(get_current_user)
+):
+    await websocket.accept()
+    while True:
+        req = await websocket.receive_text()
+        mysqlDeployCmd: MysqlDeployCmd = MysqlDeployCmd.parse_raw(req)
+        process = await bare_metal_service.mysql_deploy(mysqlDeployCmd)
         await handle_playbook_result(process, websocket)

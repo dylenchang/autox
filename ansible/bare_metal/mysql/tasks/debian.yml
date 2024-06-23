@@ -1,0 +1,45 @@
+---
+- name: 检查mysql是否已安装
+  stat:
+    path: /usr/bin/mysql
+  register: mysql_stat
+
+- name: 安装mysql服务器
+  ansible.builtin.apt:
+    name: mysql-server
+    state: present
+
+- name: 确保mysql正在运行并设置为开机启动
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: 安装可以操作mysql的软件包
+  ansible.builtin.apt:
+    name: python3-mysqldb
+    state: latest
+
+- name: 设置mysqlroot 用户的密码
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+  ignore_errors: yes
+
+- name: 修改admin用户host为所有主机
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ admin }}"
+    password: "{{ mysql_root_password }}"
+    host: "%"
+    priv: '*.*:ALL,GRANT'
+    state: present
+  ignore_errors: yes
+
+- name: 修改mysql配置文件以允许远程连接
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+  notify: Restart mysql in Debian

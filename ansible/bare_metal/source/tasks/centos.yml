@@ -1,0 +1,22 @@
+---
+- name: 获取当前时间戳
+  ansible.builtin.command: date +%Y%m%d%H%M%S
+  register: current_timestamp
+
+- name: 备份CentOS的YUM配置文件
+  ansible.builtin.command:
+    cmd: cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.{{ current_timestamp.stdout }}
+
+- name: 替换CentOS的YUM源为阿里云
+  ansible.builtin.get_url:
+    url: http://mirrors.aliyun.com/repo/Centos-7.repo
+    dest: /etc/yum.repos.d/CentOS-Base.repo
+
+- name: 清理YUM缓存
+  ansible.builtin.command: yum clean all
+
+- name: 更新YUM缓存
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+    update_cache: yes

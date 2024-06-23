@@ -30,3 +30,9 @@ class NodejsDeployCmd(BaseDeployCmd):
 
 class NginxDeployCmd(BaseDeployCmd):
     pass
+
+
+class MysqlDeployCmd(BaseDeployCmd):
+    mysql_root_password: str = "qwert!"
+    admin: str = "admin"
+    admin_password: str = "qwert!"
