@@ -1,7 +1,6 @@
 """Inventory domain service interface"""
 
 from abc import ABC
-from typing import List
 
 from toolbox.common.service.service import Service
 from toolbox.starter.system.model.inventory_do import InventoryDO

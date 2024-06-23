@@ -1,0 +1,83 @@
+- name: 检查nvm是否被安装
+  stat:
+    path: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  register: nvm_installed
+
+- name: 安装nvm
+  ansible.builtin.shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh | bash"
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  when: not nvm_installed.stat.exists
+
+- name: 将nvm添加到环境变量
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  when: not nvm_installed.stat.exists
+
+- name: Source nvm脚本
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  args:
+    executable: /bin/bash
+
+- name: 通过nvm安装node.js
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install "{{ node_version }}"
+  args:
+    executable: /bin/bash
+  environment:
+    NVM_DIR: "{{ ansible_env.HOME }}/.nvm"
+
+- name: 确保node.js成功安装
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use "{{ node_version }}"
+    node -v
+  args:
+    executable: /bin/bash
+
+- name: 将node和npm添加到环境变量
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+      export PATH="$NVM_DIR/versions/node/v{{ node_version }}/bin:$PATH"
+  when: not nvm_installed.stat.exists
+
+- name: 通过npm安装pnpm
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use "{{ node_version }}"
+    npm install -g pnpm
+  args:
+    executable: /bin/bash
+
+- name: 为npm设置阿里云镜像源
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use "{{ node_version }}"
+    npm config set registry https://registry.npmmirror.com -g
+  args:
+    executable: /bin/bash
+
+- name: 为pnpm设置阿里云镜像源
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use "{{ node_version }}"
+    pnpm config set registry https://registry.npmmirror.com -g
+  args:
+    executable: /bin/bash

@@ -2,8 +2,13 @@
 
 from abc import ABC
 
-from toolbox.starter.system.schema.bare_metal_schema import RedisDeployCmd, UserDeployCmd, JreDeployCmd, \
-    GithubHostDeployCmd
+from toolbox.starter.system.schema.bare_metal_schema import (
+    RedisDeployCmd,
+    UserDeployCmd,
+    JreDeployCmd,
+    GithubHostDeployCmd,
+    NodejsDeployCmd,
+)
 from toolbox.starter.system.schema.base_deploy_schema import BaseDeployCmd
 from toolbox.starter.system.service.base_deploy_service import BaseDeployService
 
@@ -19,3 +24,4 @@ class BareMetalService(BaseDeployService, ABC):
 
     async def github_host_deploy(self, githubHostDeployCmd: GithubHostDeployCmd): ...
 
+    async def nodejs_deploy(self, nodejsDeployCmd: NodejsDeployCmd): ...

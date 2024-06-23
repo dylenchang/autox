@@ -21,3 +21,8 @@ class JreDeployCmd(BaseDeployCmd):
 class GithubHostDeployCmd(BaseDeployCmd):
     host: str = "151.101.100.133"
     host_backup: str = "185.199.111.133"
+
+
+class NodejsDeployCmd(BaseDeployCmd):
+    nvm_version: str = "0.39.7"
+    node_version: str = "20.15.0"

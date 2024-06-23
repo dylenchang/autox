@@ -2,9 +2,7 @@
 
 from typing import List, Dict
 
-from fastapi import APIRouter, Depends, WebSocket, Query
-from loguru import logger
-from starlette.websockets import WebSocketDisconnect
+from fastapi import APIRouter, Depends, Query
 
 from toolbox.common.result import result
 from toolbox.common.schema.schema import CurrentUser

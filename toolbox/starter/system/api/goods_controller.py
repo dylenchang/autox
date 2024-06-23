@@ -1,5 +1,4 @@
 """Goods operation controller"""
-import time
 
 from fastapi import APIRouter, UploadFile, File, Depends
 
@@ -35,6 +34,5 @@ async def upload_zip(
     goods_record = GoodsDO(
         name=file_name, pic_url=url, description=description, data=binary_data
     )
-    goods_record = await goods_service.save(record=goods_record)
-    time.sleep(0)
-    return result.success(data=goods_record.id)
+    response = await goods_service.save(record=goods_record)
+    return result.success(data=response.id)

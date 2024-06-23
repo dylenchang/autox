@@ -2,12 +2,10 @@
 
 import subprocess
 import platform
-from typing import List
 
 
 from toolbox.common.service.impl.service_impl import ServiceImpl
 from toolbox.starter.system.exception.system import PingException
-from toolbox.starter.system.factory.session_factory import db_session
 from toolbox.starter.system.mapper.inventory_mapper import InventoryMapper
 from toolbox.starter.system.model.inventory_do import InventoryDO
 from toolbox.starter.system.service.inventory_service import InventoryService
@@ -57,4 +55,3 @@ class InventoryServiceImpl(ServiceImpl[InventoryMapper, InventoryDO], InventoryS
             raise PingException(f"Ping to {ip_address} timed out.")
         except subprocess.SubprocessError as e:
             raise PingException(f"Ping to {ip_address} failed with error: {e}")
-
